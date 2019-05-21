@@ -2,6 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Hello World
 Resources:
+  LambdaCodePilelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: Json
+      ManagedPolicyArns: ["arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"]
+      MaxSessionDuration: 3600
+      Path: /
+      RoleName: "myob_lambda_codepipeline"
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -20,7 +28,7 @@ Resources:
       Handler: metadata.handler
       Runtime: nodejs8.10
       CodeUri: ./metadata/
-      Role: arn:aws:iam::723736099413:role/lambda_codebuild
+      Role: !Ref LambdaCodePilelineRole
       Events:
         MetadataApi:
           Type: Api
