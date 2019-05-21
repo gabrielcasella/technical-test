@@ -12,4 +12,5 @@ Resources:
         HelloWorldApi:
           Type: Api
           Properties:
+            Path: /
             Method: GET
