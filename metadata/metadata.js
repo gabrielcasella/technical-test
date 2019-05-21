@@ -17,7 +17,7 @@ exports.handler = (event, context, callback) => {
         if (err) {
             callback(err);
         } else {
-            metadata = {"technical-test": data.pipelineExecutionSummaries[0]};
+            var metadata = {"technical-test": data.pipelineExecutionSummaries[0]};
             callback(null, {
                 statusCode: '200',
                 body: metadata
