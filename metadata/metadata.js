@@ -17,7 +17,15 @@ exports.handler = (event, context, callback) => {
         if (err) {
             callback(err);
         } else {
-            var metadata = {"technical-test": data.pipelineExecutionSummaries[0]};
+            let summary = data.pipelineExecutionSummaries[0];
+            let metadata = {
+                "technical-test": {
+                    "status": summary.status,
+                    "updated": summary.lastUpdateTime,
+                    "lastcommitsha": summary.sourceRevisions[0].revisionId
+                }
+            };
+
             callback(null, {
                 statusCode: '200',
                 body: JSON.stringify(metadata)
