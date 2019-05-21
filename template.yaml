@@ -5,12 +5,25 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.handler
+      Handler: application.handler
       Runtime: nodejs8.10
-      CodeUri: ./
+      CodeUri: ./application/
       Events:
         HelloWorldApi:
           Type: Api
           Properties:
             Path: /
+            Method: GET
+  MetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: metadata.handler
+      Runtime: nodejs8.10
+      CodeUri: ./metadata/
+      Role: arn:aws:iam::723736099413:role/lambda_codebuild
+      Events:
+        MetadataApi:
+          Type: Api
+          Properties:
+            Path: /metadata
             Method: GET
