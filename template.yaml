@@ -5,8 +5,15 @@ Resources:
   LambdaCodePilelineRole:
     Type: AWS::IAM::Role
     Properties:
-      AssumeRolePolicyDocument: Json
-      ManagedPolicyArns: ["arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"]
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSCodePipelineReadOnlyAccess"
       MaxSessionDuration: 3600
       Path: /
       RoleName: "myob_lambda_codepipeline"
@@ -28,7 +35,7 @@ Resources:
       Handler: metadata.handler
       Runtime: nodejs8.10
       CodeUri: ./metadata/
-      Role: !Ref LambdaCodePilelineRole
+      Role:  !GetAtt [ LambdaCodePilelineRole, Arn ]
       Events:
         MetadataApi:
           Type: Api
