@@ -17,7 +17,7 @@ describe( 'myLambda', function() {
             }
         }
 
-        myLambda.handler( {}, { /* context */ }, (err, result) => {
+        myApplication.handler( {}, { /* context */ }, (err, result) => {
             try {
                 expect( err ).to.not.exist;
                 expect( result ).to.exist;
