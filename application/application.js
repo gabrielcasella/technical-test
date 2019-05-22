@@ -16,25 +16,6 @@ exports.handler = (event, context, callback) => {
         TableName: table,
         Key:{
             "ApplicationName": application
-        }
-    };
-
-    docClient.get(params, function(err, data) {
-        if (err) {
-            callback(JSON.stringify(err, null, 2));
-        } else {
-            callback(null, {
-                statusCode: '200',
-                body: 'Hello World!',
-            });
-            console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
-        }
-    });
-
-    var params = {
-        TableName: table,
-        Key:{
-            "ApplicationName": application
         },
         UpdateExpression: "SET Calls = Calls + :inc",
         ExpressionAttributeValues:{
