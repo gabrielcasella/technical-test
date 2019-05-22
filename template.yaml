@@ -68,7 +68,7 @@ Resources:
       CodeUri: ./application/
       Environment:
         Variables:
-          TableName: ApplicationCalls
+          TableName: !GetAtt ApplicationCallsDynamoDBTable.Name
           ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
@@ -101,7 +101,7 @@ Resources:
         CodeUri: ./health/
         Environment:
           Variables:
-            TableName: ApplicationCalls
+            TableName: !GetAtt ApplicationCallsDynamoDBTable.Name
             HostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
             Stage: Prod
         Role: !GetAtt [ LambdaHealthRole, Arn ]
