@@ -105,12 +105,7 @@ Resources:
         Environment:
           Variables:
             TableName: !Ref ApplicationCallsDynamoDBTable
-            HostName:
-              Fn::Join:
-                - ""
-                - - "https://"
-                  - Ref: HelloWorldApi
-                  - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
+            HostName: !Sub "https://vcwgpbc01m.execute-api.${AWS::Region}.amazonaws.com/Prod/"
             Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
