@@ -66,6 +66,9 @@ Resources:
       Handler: application.handler
       Runtime: nodejs8.10
       CodeUri: ./application/
+      Environment:
+        TableName: ApplicationCalls
+        ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
         HelloWorldApi:

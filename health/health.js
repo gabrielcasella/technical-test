@@ -74,7 +74,10 @@ exports.handler = (event, context, callback) => {
                 "statusCode": api_checks.statusCode,
                 "latency": api_checks.latency
             };
-            callback(null, JSON.stringify(response));
+            callback(null, {
+                statusCode: '200',
+                body: JSON.stringify(response),
+            });
         }).on('error', function(e) {
             console.log(e);
             api_checks.online = false;
@@ -86,7 +89,10 @@ exports.handler = (event, context, callback) => {
                 "statusCode": api_checks.statusCode,
                 "latency": api_checks.latency
             };
-            callback(null, JSON.stringify(response));
+            callback(null, {
+                statusCode: '200',
+                body: JSON.stringify(response),
+            });
         });
     });
 };

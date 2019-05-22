@@ -6,13 +6,19 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
-
+function ping (event, callback) {
     if (event.queryStringParameters && event.queryStringParameters.ping) {
-        console.log("Received ping: " + event.queryStringParameters.ping);
         callback(null, {
             statusCode: '200'
         });
+        return true;
+    }
+}
+
+exports.handler = (event, context, callback) => {
+
+    // If it is a ping event for health checks lets return early
+    if (ping(event, callback)) {
         return;
     }
 
