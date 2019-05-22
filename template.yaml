@@ -7,7 +7,7 @@ Parameters:
     Default: Prod
   APIHostName:
     Type: String
-    Default: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
+    Default: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 Resources:
   LambdaCodePilelineRole:
     Type: AWS::IAM::Role
@@ -105,7 +105,7 @@ Resources:
         Environment:
           Variables:
             TableName: !Ref ApplicationCallsDynamoDBTable
-            HostName: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+            HostName: !Ref APIHostName
             Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
