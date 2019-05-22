@@ -109,7 +109,7 @@ Resources:
               Fn::Join:
                 - ""
                 - - "https://"
-                  - Ref: ApiGatewayRestApi
+                  - Ref: HelloWorldApi
                   - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}"
             Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
