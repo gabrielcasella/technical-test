@@ -17,10 +17,6 @@ function getTiming(startTime, endTime) {
     return diffInNanoSecond / MS_PER_NS;
 }
 
-function inArray(element, index, needle) {
-    return element[index] === needle;
-}
-
 exports.handler = (event, context, callback) => {
 
     var dynamoDb_checks = {
@@ -42,6 +38,10 @@ exports.handler = (event, context, callback) => {
         }
 
         var response = {
+            "API": {
+                "online": false,
+                "latency": 0
+            },
             "Database": {
                 "online": dynamoDb_checks.online,
                 "tableFound": dynamoDb_checks.tableFound,
@@ -49,6 +49,44 @@ exports.handler = (event, context, callback) => {
             }
         }
 
-        callback(null, JSON.stringify(response));
+        var https = require('https');
+
+        var api_checks = {
+            online: undefined,
+            statusCode: undefined,
+            startAt: process.hrtime(),
+            endAt: undefined,
+            latency: undefined
+        };
+
+        var options = {
+            hostname: 'vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com',
+            path: '/Stage/?ping=1',
+            method: 'GET'
+        };
+        https.get(options, function(res) {
+            api_checks.online = true;
+            api_checks.endAt = process.hrtime();
+            api_checks.statusCode = res.statusCode;
+            api_checks.latency = getTiming(api_checks.startAt, api_checks.endAt);
+            response["API"] = {
+                "online": api_checks.online,
+                "statusCode": api_checks.statusCode,
+                "latency": api_checks.latency
+            };
+            callback(null, JSON.stringify(response));
+        }).on('error', function(e) {
+            console.log(e);
+            api_checks.online = false;
+            api_checks.statusCode = e.statusCode;
+            api_checks.endAt = process.hrtime();
+            api_checks.latency = getTiming(api_checks.startAt, api_checks.endAt);
+            response["API"] = {
+                "online": api_checks.online,
+                "statusCode": api_checks.statusCode,
+                "latency": api_checks.latency
+            };
+            callback(null, JSON.stringify(response));
+        });
     });
 };
