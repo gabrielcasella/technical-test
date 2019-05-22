@@ -4,21 +4,11 @@ var expect = require( 'chai' ).expect;
 
 var myApplication = require( '../application/application' );
 
-describe( 'myLambda', function() {
+describe( 'myApplication', function() {
     it( `successful invocation`, function( done ) {
 
         process.env.TableName = 'UnitTest';
         process.env.ApplicationName = 'myobUnitTest';
-
-        var context = {
-            succeed: function( result ) {
-                expect( result.body ).to.be.a('string').that.include('Hello World!');
-                done();
-            },
-            fail: function() {
-                done(new Error('never context.fail'));
-            }
-        }
 
         myApplication.handler( {}, { /* context */ }, (err, result) => {
             try {
