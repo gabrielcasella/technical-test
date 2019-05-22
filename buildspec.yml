@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - npm install time mocha chai
+      - npm install time mocha chai lambda-local
       - export BUCKET=tech-test-myob
       - aws cloudformation package --template-file template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yaml
   pre_build:
