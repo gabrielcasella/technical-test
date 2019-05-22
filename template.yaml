@@ -46,7 +46,7 @@ Resources:
             - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
           MaxSessionDuration: 3600
           Path: /
-          RoleName: "myob_lambda_dynamodb"
+          RoleName: "myob_lambda_health"
   ApplicationCallsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
