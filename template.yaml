@@ -43,7 +43,7 @@ Resources:
                   Service: lambda.amazonaws.com
                 Action: "sts:AssumeRole"
           ManagedPolicyArns:
-            - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+            - "arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess"
           MaxSessionDuration: 3600
           Path: /
           RoleName: "myob_lambda_health"
@@ -71,7 +71,7 @@ Resources:
         HelloWorldApi:
           Type: Api
           Properties:
-            Path: /
+            Path: /{ping}
             Method: GET
   MetadataFunction:
     Type: AWS::Serverless::Function
