@@ -39,9 +39,6 @@ Resources:
         -
           AttributeName: "ApplicationName"
           AttributeType: "S"
-        -
-          AttributeName: "Calls"
-          AttributeType: "N"
       KeySchema:
         -
           AttributeName: "ApplicationName"
