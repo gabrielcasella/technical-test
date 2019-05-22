@@ -44,8 +44,8 @@ Resources:
           AttributeName: "ApplicationName"
           KeyType: "HASH"
       ProvisionedThroughput:
-        ReadCapacityUnits: "5"
-        WriteCapacityUnits: "5"
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
       TableName: "ApplicationCalls"
   HelloWorldFunction:
     Type: AWS::Serverless::Function
