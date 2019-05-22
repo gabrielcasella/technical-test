@@ -15,7 +15,7 @@ exports.handler = (event, context, callback) => {
 
     codepipeline.listPipelineExecutions(params, function(err, data) {
         if (err) {
-            callback(JSON.stringify(err, null, 2));
+            callback(err);
         } else {
             let summary = data.pipelineExecutionSummaries[0];
             let metadata = {
