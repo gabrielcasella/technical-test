@@ -67,8 +67,9 @@ Resources:
       Runtime: nodejs8.10
       CodeUri: ./application/
       Environment:
-        TableName: ApplicationCalls
-        ApplicationName: myobTechnicalTest
+        Variables:
+          TableName: ApplicationCalls
+          ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
         HelloWorldApi:
