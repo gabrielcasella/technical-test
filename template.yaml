@@ -71,7 +71,7 @@ Resources:
         HelloWorldApi:
           Type: Api
           Properties:
-            Path: /{ping}
+            Path: /{ping+}
             Method: GET
   MetadataFunction:
     Type: AWS::Serverless::Function
