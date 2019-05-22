@@ -105,7 +105,7 @@ Resources:
         Environment:
           Variables:
             TableName: !Ref ApplicationCallsDynamoDBTable
-            HostName: !Sub "https://vcwgpbc01m.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+            HostName: !Sub "vcwgpbc01m.execute-api.${AWS::Region}.amazonaws.com"
             Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
