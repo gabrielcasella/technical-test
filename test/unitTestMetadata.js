@@ -7,6 +7,8 @@ var myMetadata = require( '../metadata/metadata' );
 describe( 'myMetadata', function() {
     it( `successful invocation`, function( done ) {
 
+        process.env.PipelineName = 'myob-pipeline';
+
         myMetadata.handler( {}, { /* context */ }, (err, result) => {
             try {
                 expect( err ).to.not.exist;
