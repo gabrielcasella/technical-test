@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Hello World
-Custom:
-  Stage: Prod
-  TableName: ${self:Custom.Stage}-ApplicationCalls
-  TableThroughputs:
-    Prod: 1
-    Default: 1
-    TableThroughput: ${self:Custom.TableThroughputs.${self:Custom.Stage}, self:Custom.TableThroughputs.Default}
 Resources:
+  Config:
+    Type: "Custom:Config"
+    Version: "1.0"
+    Properties:
+      Stage: Prod
+      TableName: ApplicationCalls
+      APIHostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
   LambdaCodePilelineRole:
     Type: AWS::IAM::Role
     Properties:
@@ -57,7 +57,7 @@ Resources:
   ApplicationCallsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:Custom.TableName}
+        TableName: !GetAtt [ Config, TableName ]
         AttributeDefinitions:
           - AttributeName: ApplicationName
             AttributeType: S
@@ -65,8 +65,8 @@ Resources:
           - AttributeName: ApplicationName
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: ${self:Custom.TableThroughput}
-          WriteCapacityUnits: ${self:Custom.TableThroughput}
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -75,7 +75,7 @@ Resources:
       CodeUri: ./application/
       Environment:
         Variables:
-          TableName: ${self:Custom.TableName}
+          TableName: !GetAtt [ Config, TableName ]
           ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
@@ -108,9 +108,9 @@ Resources:
         CodeUri: ./health/
         Environment:
           Variables:
-            TableName: ${self:Custom.TableName}
-            HostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
-            Stage: Prod
+            TableName: !GetAtt [ Config, TableName ]
+            HostName: !GetAtt [ Config, APIHostName ]
+            Stage: !GetAtt [ Config, Stage ]
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
           HealthApi:
