@@ -10,27 +10,42 @@ exports.handler = (event, context, callback) => {
 
     var table = "ApplicationCalls";
 
-    var application = 'myob-technical-test';
+    var application = 'myobTechnicalTest';
 
     var params = {
-        TableName: table,
-        Key:{
-            "ApplicationName": application
+        TableName:table,
+        Item:{
+            "ApplicationName": application,
+            "Calls": 0
         },
-        UpdateExpression: "SET Calls = Calls + :inc",
-        ExpressionAttributeValues:{
-            ":inc": {"N": "1"}
-        },
-        ReturnValues:"UPDATED_NEW"
+        ConditionExpression: "attribute_not_exists(ApplicationName)"
     };
 
-    docClient.update(params, function(err, data) {
-        if (err) {
+    docClient.put(params, function(err, data) {
+        if (err && err.code != "ConditionalCheckFailedException") {
             callback(err);
         } else {
-            callback(null, {
-                statusCode: '200',
-                body: 'Hello World! ' + JSON.stringify(data, null, 2),
+            params = {
+                TableName: table,
+                Key:{
+                    "ApplicationName": application
+                },
+                UpdateExpression: "SET Calls = Calls + :inc",
+                ExpressionAttributeValues:{
+                    ":inc": 1
+                },
+                ReturnValues:"UPDATED_NEW"
+            };
+
+            docClient.update(params, function(err, data) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(null, {
+                        statusCode: '200',
+                        body: 'Hello World! This service has been called ' + data.Attributes.Calls + ' times.',
+                    });
+                }
             });
         }
     });
