@@ -1,6 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Hello World
+Custom:
+  Stage: Prod
+  TableName: ${self:Custom.Stage}-ApplicationCalls
+  TableThroughputs:
+    Prod: 1
+    Default: 1
+    TableThroughput: ${self:Custom.TableThroughputs.${self:Custom.Stage}, self:Custom.TableThroughputs.Default}
 Resources:
   LambdaCodePilelineRole:
     Type: AWS::IAM::Role
@@ -50,7 +57,7 @@ Resources:
   ApplicationCallsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ApplicationCalls
+        TableName: ${self:Custom.TableName}
         AttributeDefinitions:
           - AttributeName: ApplicationName
             AttributeType: S
@@ -58,8 +65,8 @@ Resources:
           - AttributeName: ApplicationName
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: ${self:Custom.TableThroughput}
+          WriteCapacityUnits: ${self:Custom.TableThroughput}
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -68,7 +75,7 @@ Resources:
       CodeUri: ./application/
       Environment:
         Variables:
-          TableName: !GetAtt ApplicationCallsDynamoDBTable.Name
+          TableName: ${self:Custom.TableName}
           ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
@@ -101,7 +108,7 @@ Resources:
         CodeUri: ./health/
         Environment:
           Variables:
-            TableName: !GetAtt ApplicationCallsDynamoDBTable.Name
+            TableName: ${self:Custom.TableName}
             HostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
             Stage: Prod
         Role: !GetAtt [ LambdaHealthRole, Arn ]
