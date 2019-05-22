@@ -47,15 +47,14 @@ function checkDatabaseConnection() {
 
 // Ping the application API to get the status
 function checkAPIConnection() {
-    var https = require('https');
-
-    var api_checks = {
-        online: undefined,
-        statusCode: undefined,
-        startAt: process.hrtime(),
-        endAt: undefined,
-        latency: undefined
-    };
+    var https = require('https'),
+        api_checks = {
+            online: undefined,
+            statusCode: undefined,
+            startAt: process.hrtime(),
+            endAt: undefined,
+            latency: undefined
+        };
 
     var options = {
         hostname: process.env.HostName,
@@ -70,13 +69,13 @@ function checkAPIConnection() {
             api_checks.online = true;
             api_checks.statusCode = res.statusCode;
             api_checks.latency = getTiming(api_checks.startAt, api_checks.endAt);
-            resolve(JSON.stringify(api_checks));
+            resolve(api_checks);
         }).on('error', function (e) {
             api_checks.endAt = process.hrtime();
             api_checks.online = false;
             api_checks.statusCode = 400;
             api_checks.latency = getTiming(api_checks.startAt, api_checks.endAt);
-            resolve(JSON.stringify(api_checks));
+            resolve(api_checks);
         });
     });
 }
@@ -93,6 +92,7 @@ exports.handler = (event, context, callback) => {
 
 
     APIConnection.then(function(APIResult) {
+        console.log(JSON.stringify(APIResult));
         response["API"] = {
             "online": APIResult.online,
             "statusCode": APIResult.statusCode,
@@ -105,7 +105,7 @@ exports.handler = (event, context, callback) => {
                 "tableFound": DBResult.tableFound,
                 "latency": DBResult.latency
             };
-            
+
             callback(null, {
                 statusCode: '200',
                 body: JSON.stringify(response),
