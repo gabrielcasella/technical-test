@@ -33,20 +33,18 @@ Resources:
         Path: /
         RoleName: "myob_lambda_dynamodb"
   ApplicationCallsDynamoDBTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: "ApplicationName"
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "ApplicationName"
           AttributeType: "S"
-      KeySchema:
-        -
-          AttributeName: "ApplicationName"
-          KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: "1"
-        WriteCapacityUnits: "1"
-      TableName: "ApplicationCalls"
+        KeySchema:
+        - AttributeName: "ApplicationName"
+          KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: "1"
+          WriteCapacityUnits: "1"
+        TableName: "ApplicationCalls"
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
