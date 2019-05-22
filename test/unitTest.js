@@ -7,6 +7,9 @@ var myApplication = require( '../application/application' );
 describe( 'myLambda', function() {
     it( `successful invocation`, function( done ) {
 
+        process.env.TableName = 'UnitTest';
+        process.env.ApplicationName = 'myobUnitTest';
+
         var context = {
             succeed: function( result ) {
                 expect( result.body ).to.be.a('string').that.include('Hello World!');
