@@ -17,12 +17,46 @@ Resources:
       MaxSessionDuration: 3600
       Path: /
       RoleName: "myob_lambda_codepipeline"
+  LambdaDynamoDBRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: "sts:AssumeRole"
+        ManagedPolicyArns:
+          - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+        MaxSessionDuration: 3600
+        Path: /
+        RoleName: "myob_lambda_dynamodb"
+  ApplicationCallsDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "ApplicationName"
+          AttributeType: "S"
+        -
+          AttributeName: "Calls"
+          AttributeType: "N"
+      KeySchema:
+        -
+          AttributeName: "ApplicationName"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+      TableName: "ApplicationCalls"
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: application.handler
       Runtime: nodejs8.10
       CodeUri: ./application/
+      Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
         HelloWorldApi:
           Type: Api
@@ -35,7 +69,7 @@ Resources:
       Handler: metadata.handler
       Runtime: nodejs8.10
       CodeUri: ./metadata/
-      Role:  !GetAtt [ LambdaCodePilelineRole, Arn ]
+      Role: !GetAtt [ LambdaCodePilelineRole, Arn ]
       Events:
         MetadataApi:
           Type: Api

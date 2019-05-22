@@ -15,12 +15,12 @@ exports.handler = (event, context, callback) => {
 
     codepipeline.listPipelineExecutions(params, function(err, data) {
         if (err) {
-            callback(err);
+            callback(JSON.stringify(err, null, 2));
         } else {
             let summary = data.pipelineExecutionSummaries[0];
             let metadata = {
-                "technical-test": {
-                    "status": summary.status,
+                "myob-technical-test": {
+                    "lastbuildstatus": summary.status,
                     "updated": summary.lastUpdateTime,
                     "lastcommitsha": summary.sourceRevisions[0].revisionId
                 }
