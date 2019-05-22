@@ -5,6 +5,9 @@ phases:
       - npm install time
       - export BUCKET=tech-test-myob
       - aws cloudformation package --template-file template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yaml
+  pre_build:
+    commands:
+      - npm test
 artifacts:
   type: zip
   files:
