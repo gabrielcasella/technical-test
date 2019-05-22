@@ -1,14 +1,17 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Hello World
+Parameters:
+  Stage:
+    Type: String
+    Default: Prod
+  TableName:
+    Type: String
+    Default: ApplicationCalls
+  APIHostName:
+    Type: String
+    Default: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
 Resources:
-  Config:
-    Type: "Custom::Config"
-    Version: "1.0"
-    Properties:
-      Stage: Prod
-      TableName: ApplicationCalls
-      APIHostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
   LambdaCodePilelineRole:
     Type: AWS::IAM::Role
     Properties:
@@ -57,7 +60,7 @@ Resources:
   ApplicationCallsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: !GetAtt [ Config, TableName ]
+        TableName: !Ref TableName
         AttributeDefinitions:
           - AttributeName: ApplicationName
             AttributeType: S
@@ -75,7 +78,7 @@ Resources:
       CodeUri: ./application/
       Environment:
         Variables:
-          TableName: !GetAtt [ Config, TableName ]
+          TableName: !Ref TableName
           ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
@@ -108,9 +111,9 @@ Resources:
         CodeUri: ./health/
         Environment:
           Variables:
-            TableName: !GetAtt [ Config, TableName ]
-            HostName: !GetAtt [ Config, APIHostName ]
-            Stage: !GetAtt [ Config, Stage ]
+            TableName: !Ref TableName
+            HostName: !Ref APIHostName
+            Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
           HealthApi:
