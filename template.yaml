@@ -58,18 +58,14 @@ Resources:
           Path: /
           RoleName: "myob_lambda_health"
   ApplicationCallsDynamoDBTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: !Ref TableName
-        AttributeDefinitions:
-          - AttributeName: ApplicationName
-            AttributeType: S
-        KeySchema:
-          - AttributeName: ApplicationName
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: ApplicationName
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -78,7 +74,7 @@ Resources:
       CodeUri: ./application/
       Environment:
         Variables:
-          TableName: !Ref TableName
+          TableName: !Ref ApplicationCallsDynamoDBTable
           ApplicationName: myobTechnicalTest
       Role: !GetAtt [ LambdaDynamoDBRole, Arn ]
       Events:
@@ -111,7 +107,7 @@ Resources:
         CodeUri: ./health/
         Environment:
           Variables:
-            TableName: !Ref TableName
+            TableName: !Ref ApplicationCallsDynamoDBTable
             HostName: !Ref APIHostName
             Stage: !Ref Stage
         Role: !GetAtt [ LambdaHealthRole, Arn ]
