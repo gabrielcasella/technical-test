@@ -22,12 +22,12 @@ exports.handler = (event, context, callback) => {
         return;
     }
 
-    var table = "ApplicationCalls";
+    var table = process.env.TableName;
 
-    var application = 'myobTechnicalTest';
+    var application = process.env.ApplicationName;
 
     var params = {
-        TableName:table,
+        TableName: table,
         Item:{
             "ApplicationName": application,
             "Calls": 0

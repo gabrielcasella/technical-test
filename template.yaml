@@ -83,6 +83,9 @@ Resources:
       Handler: metadata.handler
       Runtime: nodejs8.10
       CodeUri: ./metadata/
+      Environment:
+        Variables:
+          PipelineName: "myob-pipeline"
       Role: !GetAtt [ LambdaCodePilelineRole, Arn ]
       Events:
         MetadataApi:
@@ -96,6 +99,11 @@ Resources:
         Handler: health.handler
         Runtime: nodejs8.10
         CodeUri: ./health/
+        Environment:
+          Variables:
+            TableName: ApplicationCalls
+            HostName: "vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com"
+            Stage: Prod
         Role: !GetAtt [ LambdaHealthRole, Arn ]
         Events:
           HealthApi:

@@ -9,7 +9,7 @@ exports.handler = (event, context, callback) => {
     var codepipeline = new AWS.CodePipeline({apiVersion: '2016-10-06'});
 
     var params = {
-        pipelineName: 'myob-pipeline', /* required */
+        pipelineName: process.env.PipelineName,
         maxResults: '1',
     };
 

@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
 const NS_PER_SEC = 1e9;
 const MS_PER_NS = 1e6;
-const table_name = 'ApplicationCalls';
 
 AWS.config.update({
     region: "ap-southeast-2"
@@ -19,6 +18,8 @@ function getTiming(startTime, endTime) {
 
 exports.handler = (event, context, callback) => {
 
+    var table = process.env.TableName;
+
     var dynamoDb_checks = {
         online: undefined,
         tableFound: undefined,
@@ -33,7 +34,7 @@ exports.handler = (event, context, callback) => {
             console.log(err, err.stack);
         } else {
             dynamoDb_checks.online = true;
-            dynamoDb_checks.tableFound = data.TableNames.includes(table_name);
+            dynamoDb_checks.tableFound = data.TableNames.includes(table);
             dynamoDb_checks.latency = getTiming(dynamoDb_checks.startAt, dynamoDb_checks.endAt);
         }
 
@@ -60,8 +61,8 @@ exports.handler = (event, context, callback) => {
         };
 
         var options = {
-            hostname: 'vcwgpbc01m.execute-api.ap-southeast-2.amazonaws.com',
-            path: '/Stage/?ping=1',
+            hostname: process.env.HostName,
+            path: '/' + process.env.Stage + '/?ping=1',
             method: 'GET'
         };
         https.get(options, function(res) {
