@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: Hello World
 Resources:
   Config:
-    Type: "Custom:Config"
+    Type: "Custom::Config"
     Version: "1.0"
     Properties:
       Stage: Prod
